@@ -35,6 +35,9 @@
 
 
 .cat-reminder{display:flex;align-items:flex-start;gap:13px;margin-top:24px;padding:20px 22px;border-radius:16px;background:#f0eee3;border-left:3px solid #96aa92;max-width:850px}.cat-reminder-paw{font-size:25px;line-height:1.4;flex-shrink:0}.cat-reminder strong{display:block;font-size:12px;letter-spacing:.04em;color:#47665b;margin-bottom:7px}.cat-reminder p{font-size:15px;line-height:1.65;color:#4d5e55}@media(max-width:420px){.cat-reminder{padding:16px 14px;gap:9px}.cat-reminder p{font-size:14px}}
+
+.custom-panel{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:24px;background:#e8eee5;border-radius:18px;margin:0 0 35px}.custom-panel p{font-size:13px;margin-top:5px}.custom-button{border:0;border-radius:12px;background:#385952;color:#fff;padding:12px 18px;font-weight:700;cursor:pointer;white-space:normal}#task-editor{width:min(720px,calc(100% - 24px));max-height:90dvh;border:1px solid #cfc3b4;border-radius:22px;padding:28px;background:#fffaf3;color:#253b41;overflow-y:auto}#task-editor::backdrop{background:#203c3b88}.editor-header{display:flex;align-items:flex-start;gap:18px}.editor-header p,.editor-footnote{font-size:12px;line-height:1.6;margin-top:10px;color:#59686a}#close-editor{border:0;background:transparent;font-size:32px;padding:0 6px;cursor:pointer}.editor-day{display:flex;align-items:center;gap:12px;margin:22px 0;font-weight:700}.editor-day select{flex:1;min-width:0}.editor-fields{display:grid;grid-template-columns:1fr 2fr;gap:14px}.editor-fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700}.editor-fields .wide{grid-column:1/-1}#task-editor input,#task-editor textarea,#task-editor select{font:inherit;color:#253b41;background:white;border:1px solid #c8c9bc;border-radius:9px;padding:10px;max-width:100%}#task-editor textarea{resize:vertical;min-height:65px}.editor-actions{display:flex;flex-wrap:wrap;gap:10px}.editor-actions button:not(.custom-button){border:1px solid #b8c6b9;background:#f1f3e9;color:#385952;border-radius:10px;padding:10px 12px;cursor:pointer}.editor-status{min-height:24px;margin:12px 0;font-size:13px;color:#385952}#task-editor hr{border:0;border-top:1px solid #ded8ca;margin:22px 0}#task-editor :focus-visible{outline:3px solid #b77c53;outline-offset:2px}@media(max-width:600px){.custom-panel{flex-direction:column;align-items:stretch}#task-editor{padding:20px}.editor-header h2{font-size:1.6rem}.editor-actions button{flex:1 1 auto}.editor-fields{grid-template-columns:1fr}.editor-fields .wide{grid-column:auto}}
+
 </style>
   <title>Адвент уставшего котика 🐈</title>
   
@@ -77,6 +80,13 @@
       <aside class="permission-slip"><span class="permission-icon" aria-hidden="true">💌</span><div><strong>Котику можно пропускать</strong><p>Любое задание можно заменить или пропустить. Hard не лучше лёгкого варианта. Праздничное настроение тоже необязательно: здесь тебе рады любому.</p></div></aside>
     </main>
 
+
+<section class="custom-panel" aria-label="Настройка заданий"><div><strong>Твой котик знает, что тебе нравится</strong><p>Замени любую идею на свою. Редактор показывает все 24 дня, включая будущие.</p></div><button type="button" class="custom-button" id="open-editor">✎ Редактировать задания</button></section>
+<dialog id="task-editor" aria-labelledby="editor-title"><form id="editor-form"><header class="editor-header"><div><h2 id="editor-title">Мой уютный адвент</h2><p>Изменения сохраняются только в этом браузере. На опубликованном сайте у других посетителей останется исходный список.</p></div><button type="button" id="close-editor" aria-label="Закрыть редактор">×</button></header>
+<label class="editor-day">День <select id="editor-day"></select></label>
+<div class="editor-fields"><label>Эмодзи<input id="edit-emoji" maxlength="32" required></label><label>Категория<input id="edit-category" maxlength="80" required></label><label class="wide">Название<input id="edit-title" maxlength="120" required></label><label class="wide">Основное задание · Уютный котик<textarea id="edit-main" maxlength="2000" rows="3" required></textarea></label><label class="wide">Лёгкий вариант · Клубочком<textarea id="edit-easy" maxlength="2000" rows="2" required></textarea></label><label class="wide">Hard · Котик с огоньком<textarea id="edit-hard" maxlength="2000" rows="3" required></textarea></label><label class="wide">Котик напоминает<textarea id="edit-note" maxlength="2000" rows="3" required></textarea></label></div>
+<p class="editor-status" id="editor-status" role="status"></p><div class="editor-actions"><button class="custom-button" type="submit">Сохранить день</button><button type="button" id="restore-day">Вернуть исходный день</button></div><hr><div class="editor-actions"><button type="button" id="export-tasks">Скачать мой список</button><button type="button" id="import-tasks">Загрузить список</button><button type="button" id="restore-tasks">Вернуть все исходные задания</button></div><input type="file" id="tasks-file" accept=".json,application/json" hidden><p class="editor-footnote">Файл JSON переносит только задания. Отметки и история анимаций не меняются. Перед переходом к другому дню сохрани изменения.</p></form></dialog>
+
     <footer><div><strong>Тебе уже можно отдыхать.</strong> Пусть этой зимой будет немного теплее. <span aria-hidden="true">♡</span></div><div class="footer-bottom"><span>© <span id="footer-year">2026</span> · Тёплые лапки, тихие праздники.</span><span>Отметки и просмотр анимаций сохраняются в этом браузере. Сброс не меняет календарные даты открытия.</span><button type="button" class="text-button" id="reset-progress">Сбросить весь статус</button></div></footer>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -89,6 +99,7 @@
   // Формат: эмодзи, категория, название, основное задание, улиточка (2 мин), герой (по желанию).
   const TASKS = {"solo": [["☕", "Тепло", "Какао размером с обнимашку", "Сделай большую кружку горячего какао и устройся с ней поудобнее. Ничего параллельно делать не нужно.", "Согрей ладони о любимую кружку с любым тёплым напитком.", "Приготовь какао с шапкой сливок или маршмеллоу и устрой домашнюю какао-дегустацию.", "Отдых не нужно заслуживать. Какао не спрашивает, сколько дел ты сегодня сделала. Котик тоже."], ["✨", "Огоньки", "Личные северные сияния", "Включи гирлянду или маленький светильник и побудь немного в этом мягком свете.", "Полюбуйся одним огоньком за окном.", "Прогуляйся по улице с праздничной иллюминацией, с остановкой на что-нибудь горячее.", "Ты не обязана быть светом в конце каждого чужого тоннеля. Сегодня можно просто смотреть на гирлянду."], ["🍊", "Вкус декабря", "Мандариновая пауза", "Почисти мандарин, вдохни аромат кожуры и съешь его дольку за долькой.", "Съешь одну дольку или другой любимый зимний фрукт.", "Сделай тарелку мандаринов, орехов и шоколада и устрой уютный зимний перекус.", "Мир подождёт, пока ты почистишь мандарин. Если не подождёт — ему тоже, кажется, нужен мандарин."], ["🧦", "Уют", "Лапки в тепле", "Надень самые приятные носки или тапочки, укрой ноги пледом и побудь домашним котиком.", "Спрячь ступни под одеяло на минутку.", "Устрой вечер в самой мягкой пижаме с тёплым напитком и зимним фильмом.", "Ответственность за мир во всём мире можно ненадолго снять вместе с уличной обувью. Тапочки её не поддерживают."], ["🎶", "Музыка", "Праздник на тихой громкости", "Включи любимую зимнюю или новогоднюю песню. Можно подпевать, мурлыкать или просто слушать.", "Послушай один любимый припев.", "Устрой маленький праздничный концерт дома: спой, сыграй или потанцуй под несколько песен.", "Можно выключить внутреннее «надо» хотя бы на одну песню. Котик побудет диджеем, а не начальником."], ["🍪", "Вкус декабря", "Печенька к чаю", "Выбери вкусное печенье и съешь его с чаем с красивой тарелки. Магазинное прекрасно подходит.", "Съешь любимую вкусняшку без повода.", "Испеки небольшую порцию имбирного печенья — только если возиться с тестом приятно.", "Печенька — не премия за безупречное поведение. Отдел кошачьей бухгалтерии разрешил выдать её просто так."], ["🎬", "Тихий вечер", "Кино под пледом", "Посмотри зимний мультфильм, серию или кусочек любимого праздничного кино.", "Найди и посмотри одну любимую сцену.", "Устрой полноценный домашний киносеанс с пледом и вкусным перекусом.", "Тебе не обязательно извлекать пользу даже из отдыха. Котик посмотрел кино и не написал ни одного вывода. Доволен."], ["❄️", "Зима рядом", "Снежное наблюдение", "Посиди у окна с чаем и посмотри на зимний мир. Снег необязателен: ветки, небо и вечерние окна тоже хороши.", "Посмотри в окно и найди одну красивую деталь.", "Сходи на короткую прогулку в парк и полюбуйся зимой. Если погода неприятная — оставайся у окна.", "Пока ты смотришь в окно, жизнь не проходит мимо. Это она и есть. Просто сегодня без презентации."], ["🎄", "Праздник дома", "Одна любимая игрушка", "Повесь одну ёлочную игрушку или поставь на видное место любимую праздничную вещицу.", "Рассмотри украшение, которое уже есть дома.", "Наряди маленькую ёлку или одну ветку именно так, как нравится тебе.", "Одна игрушка — уже празднично. Котик проверил: ёлка не требует защиты проекта перед комиссией."], ["📖", "Тихий вечер", "Зимняя сказка", "Прочитай пару страниц уютной зимней истории или послушай аудиосказку.", "Прочитай один абзац или послушай минуту.", "Устрой себе час чтения под пледом, с перерывами на чай и мечтания.", "Можно закрыть книгу на середине главы, если хочется спать. Герои подождут. У них там закладка."], ["🧁", "Маленький выход", "Кафе для котика", "Выпей любимый напиток у окна дома или в кафе и немного поглазей по сторонам.", "Сделай пару неспешных глотков из любимой чашки.", "Выберись в уютную кофейню с праздничными витринами и попробуй сезонный десерт.", "О тебе тоже можно заботиться — и тебе самой, и тем, кто рядом. Котик напоминает: принимать заботу не запрещено правилами кафе."], ["🌲", "Зимние запахи", "Лес на расстоянии вдоха", "Насладись приятным зимним ароматом: еловой веткой, мандарином или корицей в чае. Выбери то, что любишь.", "Вдохни аромат чая или мандарина — без специальных приготовлений.", "Сходи погулять среди хвойных деревьев или загляни на ёлочный базар просто за атмосферой.", "Ты не обязана всё время расти над собой. Даже ёлки зимой стоят и ничего особенного не доказывают."], ["💌", "Тепло рядом", "Новогодний привет", "Отправь тёплому тебе человеку милую зимнюю картинку или короткое «обнимаю». Только если хочется общения.", "Пошли один уютный эмодзи. Или мысленно передай кому-то привет.", "Выбери красивую открытку и напиши несколько тёплых строк человеку, которому будешь рада.", "Тёплый привет не обязывает быть на связи весь вечер. Можно отправить сердечко и уйти в плед. Котик так и делает."], ["🛁", "Уют", "Оттаять после зимы", "Прими приятный тёплый душ и завернись в мягкое полотенце. Пусть вечер станет чуть уютнее.", "Умойся тёплой водой и укутай плечи.", "Устрой вечер тёплой ванны, любимой музыки и чистой пижамы.", "Сегодня можно просто отогреться. Не обязательно заодно переродиться, всё осознать и начать новую жизнь после душа."], ["🎁", "Радость", "Подарок без повода", "Подари себе небольшую приятность: любимую сладость, время с книгой или использование красивой вещи «на потом». Покупка необязательна.", "Достань любимую чашку или ручку и попользуйся ей сегодня.", "Выбери себе небольшой праздничный подарок в комфортном бюджете и красиво его заверни.", "Красивые вещи можно использовать до того, как наступит идеальный случай. Котик считает, что твоё присутствие — уже повод."], ["⛸️", "Маленький выход", "Зимнее приключение", "Пройдись за горячим напитком или просто до красивого зимнего уголка рядом с домом.", "Посмотри на зимний пейзаж с порога или из окна.", "Сходи на каток, если любишь кататься. Или просто посмотри на каток с чашкой чего-нибудь тёплого.", "Прогулка не обязана стать подвигом. Развернуться домой, когда замёрзли лапки, — вполне достойный сюжет приключения."], ["✂️", "Творчество", "Снежинка без экзамена", "Вырежи одну бумажную снежинку. Кривая тоже умеет быть снежинкой.", "Нарисуй маленькую звёздочку или снежинку на клочке бумаги.", "Сделай несколько снежинок и укрась ими окно или собери маленькую бумажную гирлянду.", "Снежинка может быть кривой. У зимы нет отдела контроля качества твоего досуга, а котик туда не нанимался."], ["🏘️", "Праздничный выход", "Котик идёт на ярмарку", "Посмотри на праздничную витрину рядом с домом или фотографии рождественских ярмарок, сидя в тепле.", "Полюбуйся одной фотографией сказочного зимнего города.", "Выберись на рождественскую ярмарку: огоньки, горячий напиток и никакой обязанности обходить все ряды.", "На ярмарке можно ничего не купить и уйти пораньше. Ты пришла за удовольствием, а не проходить все уровни праздника."], ["🥣", "Вкус декабря", "Ужин, который обнимает", "Съешь что-нибудь тёплое и любимое: суп, кашу, пирог. Готовая еда и доставка тоже забота.", "Согрей привычную еду и съешь её удобно устроившись.", "Приготовь любимое зимнее блюдо ради удовольствия от процесса и запахов на кухне.", "Еда не становится менее заботливой, если её приготовил кто-то другой. Котик вообще ни разу не стоял у плиты — и ничего."], ["📷", "Красота", "Маленькая зимняя открытка", "Сфотографируй что-нибудь уютное: чашку, огоньки, тень от ветки. Снимок можно оставить только себе.", "Найди взглядом один красивый зимний кадр, даже без телефона.", "Прогуляйся с камерой и собери три кадра для своей маленькой зимней истории.", "Красоту можно заметить и никому не показать. Котик разрешает оставить этот кадр без публикации, подписи и контент-плана."], ["🕯️", "Тихий вечер", "Камин для домашнего кота", "Включи видео с потрескивающим камином и посиди рядом с экранным огнём с чашкой чая.", "Послушай треск поленьев одну минуту.", "Устрой вечер при мягком свете: камин на экране, настольная лампа и любимая музыка.", "У камина разрешается просто сидеть. Даже огонь справляется со своей работой без твоего участия."], ["🧸", "Тепло рядом", "Обнимательный день", "Обними близкого человека, если вам обоим хочется. Подушка, плед и мягкая игрушка тоже подходят.", "Обними подушку и устройся удобнее.", "Пригласи приятного человека на чай с мандаринами или на короткую прогулку к огонькам.", "Просить обнять тебя — не слишком много. А если сегодня хочется побыть одной, котик и это понимает. Он специалист по обоим вариантам."], ["🌟", "Мечты", "Праздник по твоему вкусу", "Помечтай о приятном праздничном дне: что хочется есть, видеть и слышать. Не нужно превращать мечту в план.", "Выбери одно маленькое «хочу» на праздники.", "Устрой один кусочек этого праздника уже сегодня: завтрак, музыка, прогулка или любимый десерт.", "Твоё «хочу» может быть маленьким и непрактичным. Котик мечтает о коробке и не собирается обосновывать её стратегическую ценность."], ["🐈", "Сочельник для котика", "Тебе можно просто быть", "Устройся в своём уютном месте с любимым напитком. Сегодня ничего не нужно заслуживать — ни отдых, ни праздник.", "Завернись во что-нибудь мягкое. На сегодня достаточно.", "Устрой маленький праздник на своих условиях: любимая еда, огоньки и только желанная компания. Можно в одиночку.", "Ты не обязана закончить все дела, чтобы наступил праздник. Он придёт по календарю. Котик встретит его с тобой — без проверки выполненных задач."]]};
 
+  const DEFAULT_TASKS = JSON.parse(JSON.stringify(TASKS.solo));
   const CATEGORY_EMOJI = { 'Цифровое':'💻', 'Дом':'🏠', 'Деньги':'💸', 'Дела':'🗓', 'Забота':'💗', 'Отдых':'🍵', 'Люди':'💌', 'Свобода':'🕊', 'Детские вещи':'🧸' };
   const WELL_DONE = ["Мур. Пусть тебе будет тепло. 🐾", "Эта маленькая радость — твоя. ♡", "Котик позаботился о себе. 🐈"];
   const LEVELS = [
@@ -368,6 +379,88 @@
       }
     }
   });
+
+  const CUSTOM_TASKS_KEY = 'tired-kitty-custom-tasks-v1';
+  function validateTasks(value) {
+    const limits = [32,80,120,2000,2000,2000,2000];
+    return Array.isArray(value) && value.length === 24 && value.every(row => Array.isArray(row) && row.length === 7 && row.every((v,i) => typeof v === 'string' && v.trim().length > 0 && v.length <= limits[i]));
+  }
+  try {
+    const custom = JSON.parse(storageGet(CUSTOM_TASKS_KEY) || 'null');
+    if (validateTasks(custom)) TASKS.solo = custom;
+  } catch {}
+  const editFields = ['edit-emoji','edit-category','edit-title','edit-main','edit-easy','edit-hard','edit-note'];
+  let editingDay = 0;
+  let editorSaved = '';
+  function fieldValues() { return editFields.map(id => $(id).value.trim()); }
+  function editorDirty() { return JSON.stringify(fieldValues()) !== editorSaved; }
+  function allowDiscard() { return !editorDirty() || window.confirm('Есть несохранённые изменения. Отменить их?'); }
+  function editorMessage(message) { $('editor-status').textContent = message; }
+  function fillDayOptions() {
+    $('editor-day').innerHTML = TASKS.solo.map((task,i) => `<option value="${i}">${i+1}. ${escapeHtml(task[2])}</option>`).join('');
+    $('editor-day').value = String(editingDay);
+  }
+  function loadEditorDay(day) {
+    editingDay = day;
+    editFields.forEach((id,i) => { $(id).value = TASKS.solo[day][i]; });
+    $('editor-day').value = String(day);
+    editorSaved = JSON.stringify(fieldValues());
+    editorMessage('');
+  }
+  function persistCustom(tasks) {
+    try { localStorage.setItem(CUSTOM_TASKS_KEY, JSON.stringify(tasks)); }
+    catch { editorMessage('Браузер не разрешил сохранить список. Скачай его перед закрытием страницы.'); return false; }
+    return true;
+  }
+  function applyCustom(tasks, message) {
+    TASKS.solo = tasks;
+    const saved = persistCustom(tasks);
+    fillDayOptions(); loadEditorDay(editingDay); render(false);
+    editorMessage(saved ? message : 'Изменения применены, но браузер не смог их сохранить. Скачай список перед закрытием страницы.');
+  }
+  $('open-editor').addEventListener('click', () => {
+    editingDay = Math.max(0,(selectedDay || season(now()).unlocked || 1)-1);
+    fillDayOptions(); loadEditorDay(editingDay); $('task-editor').showModal();
+  });
+  $('close-editor').addEventListener('click', () => { if (allowDiscard()) $('task-editor').close(); });
+  $('task-editor').addEventListener('cancel', e => { if (!allowDiscard()) e.preventDefault(); });
+  $('editor-day').addEventListener('change', e => {
+    const requested = Number(e.target.value);
+    if (allowDiscard()) loadEditorDay(requested); else e.target.value = String(editingDay);
+  });
+  $('editor-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const tasks = TASKS.solo.map(row=>row.slice()); tasks[editingDay] = fieldValues();
+    if (!validateTasks(tasks)) { editorMessage('Заполни все поля. Поля не могут состоять только из пробелов.'); return; }
+    applyCustom(tasks, `День ${editingDay+1} сохранён. Мур!`);
+  });
+  $('restore-day').addEventListener('click', () => {
+    if (!window.confirm('Вернуть исходные тексты этого дня?')) return;
+    const tasks = TASKS.solo.map(row=>row.slice()); tasks[editingDay] = DEFAULT_TASKS[editingDay].slice();
+    applyCustom(tasks, 'Исходное задание восстановлено.');
+  });
+  $('restore-tasks').addEventListener('click', () => {
+    if (!window.confirm('Заменить все 24 задания исходными? Сначала скачай свой список, если хочешь его сохранить.')) return;
+    applyCustom(DEFAULT_TASKS.map(row=>row.slice()), 'Все исходные задания восстановлены.');
+  });
+  $('export-tasks').addEventListener('click', () => {
+    if (editorDirty()) { editorMessage('Сначала сохрани изменения дня, чтобы они вошли в файл.'); return; }
+    const data = JSON.stringify({format:'tired-kitty-advent',version:1,tasks:TASKS.solo},null,2);
+    const url = URL.createObjectURL(new Blob([data],{type:'application/json'}));
+    const a=document.createElement('a'); a.href=url; a.download='My-Tired-Kitty-Tasks.json'; document.body.append(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000); editorMessage('Файл со списком подготовлен для скачивания.');
+  });
+  $('import-tasks').addEventListener('click', () => { if (allowDiscard()) $('tasks-file').click(); });
+  $('tasks-file').addEventListener('change', async e => {
+    const file=e.target.files[0]; e.target.value=''; if(!file) return;
+    if(file.size>250000){editorMessage('Файл слишком большой. Выбери JSON, скачанный из редактора.');return;}
+    let data;
+    try { data=JSON.parse(await file.text()); } catch { editorMessage('Не удалось прочитать JSON-файл. Текущий список не изменён.');return; }
+    if(data?.format!=='tired-kitty-advent' || data.version!==1 || !validateTasks(data.tasks)) {editorMessage('Неверный формат: нужны 24 задания со всеми семью текстовыми полями.');return;}
+    if (!window.confirm('Заменить текущие 24 задания списком из файла?')) return;
+    applyCustom(data.tasks.map(row=>row.map(v=>v.trim())), 'Список загружен и сохранён.');
+  });
+
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshClock(); });
   window.addEventListener('focus', refreshClock);
   render();
